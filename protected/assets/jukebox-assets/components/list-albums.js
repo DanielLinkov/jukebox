@@ -1,12 +1,14 @@
 
 export default{
-	props: ['genres','activeGenre','allSongs'],
+	inject: ['allSongs','activeGenre'],
 	emits: ['selected'],
 	data(){
 		return {
+			genres: [],
 		}
 	},
 	created(){
+		this.genres = [...new Set(this.allSongs.map(song => song.genre))];	//Get unique genres
 	},
 	template: /* html */`
 		<div>
