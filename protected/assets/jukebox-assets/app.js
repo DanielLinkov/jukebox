@@ -5,10 +5,6 @@ import Artists from './components/list-artists.js';
 const app = Vue.createApp({
 	provide(){
 		return {
-			songsInGenre: Vue.computed(() => this.songsInGenre),	//Filtered songs by genre
-			artists: Vue.computed(() => this.artists),	//Unique artists
-			songs: Vue.computed(() => this.songs),	//Filtered songs
-			activeArtist: Vue.computed(() => this.activeArtist)	//Active artist1
 		}
 	},
 	data() {
@@ -77,25 +73,33 @@ const app = Vue.createApp({
 	},
 	template: /* html */ `
 		<h2 class="text-center">Jukebox</h2>
-		<div class="row">
-			<div class="col-4">
-				<jb-list-genres
-					:activeGenre="activeGenre"
-					:genres="genres"
-					:allSongs="allSongs"
-					@selected="onGenreSelected"
-				></jb-list-genres>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-4">
+					<jb-list-genres
+						:activeGenre="activeGenre"
+						:genres="genres"
+						:allSongs="allSongs"
+						@selected="onGenreSelected"
+					></jb-list-genres>
+				</div>
+				<div class="col-md-4">
+					<jb-list-artists
+						:activeArtist="activeArtist"
+						:artists="artists"
+						:songsInGenre="songsInGenre"
+						@selected="onArtistSelected"
+					></jb-list-artists>
+				</div>
 			</div>
-			<div class="col-4">
-				<jb-list-artists
-					:activeArtist="activeArtist"
-					:artists="artists"
-					:songsInGenre="songsInGenre"
-					@selected="onArtistSelected"
-				></jb-list-artists>
+			<div class="row">
+				<div class="col-12">
+					<jb-songs
+						:songs="songsInArtist"
+					></jb-songs>
+				</div>
 			</div>
 		</div>
-		<jb-songs></jb-songs>
 	`
 });
 

@@ -1,6 +1,6 @@
 
 export default {
-	inject: ['songs'],
+	props: ['songs'],
 	template: /* html */`
 		<table class="table table-striped">
 			<thead>
