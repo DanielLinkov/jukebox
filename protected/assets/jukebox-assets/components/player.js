@@ -26,6 +26,9 @@ export default {
 		}
 	},
 	methods: {
+		onVolumeSlide(event){
+			this.$refs.audio.volume = event.target.value;
+		},
 		onPrevious() {
 			this.$emit('previous');
 		},
@@ -73,7 +76,7 @@ export default {
 	template: /* html */`
 		<div class="w-100 d-flex justify-content-between player">
 			<div class="song-info text-white">
-				<div class="fw-bold">{{ song ? song.title : 'No song selected' }}</div>
+				<div class="fw-bold">({{ song?.track }}) {{ song ? song.title : 'No song selected' }}</div>
 				<div>{{ song?.artist || '-' }}</div>
 			</div>
 			<div class="controls d-flex flex-column justify-content-center">
@@ -88,6 +91,13 @@ export default {
 						<div class="progress-bar" ref="playbackProgress"></div>
 					</div>
 					<div ref="songDuration" class="text-white"></div>
+				</div>
+			</div>
+			<div class="volume pt-2">
+				<div class="bg-primary py-1 px-2 rounded-5 d-flex align-items-center gap-1">
+					<i class="bi bi-volume-off-fill"></i>
+					<input @input="onVolumeSlide" type="range" value="0.5" class="form-range" min="0" max="1" step="0.05">
+					<i class="bi bi-volume-up-fill"></i>
 				</div>
 			</div>
 			<audio :src="url" preload="auto" ref="audio"></audio>
