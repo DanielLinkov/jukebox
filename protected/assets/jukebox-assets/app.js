@@ -78,7 +78,7 @@ const app = Vue.createApp({
 			<button class="btn btn-sm btn-secondary" title="Process all media files" @click="onRescanMedia"><i class="bi bi-arrow-clockwise"></i></button>
 		</div>
 		<h2 class="text-center">Jukebox</h2>
-		<div class="container-fluid mb-5 pb-2">
+		<div class="container-fluid mb-5 pb-3">
 			<div class="row">
 				<div class="col-md-4">
 					<jb-list-genres
