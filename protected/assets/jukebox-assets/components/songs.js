@@ -1,10 +1,23 @@
 
 export default {
-	props: ['songs'],
+	props: ['songs','currentSong'],
 	emits: ['play-song'],
 	data(){
 		return {
-			selectedId: null
+			selectedId: null,
+			songsSorted: []
+		}
+	},
+	watch: {
+		songs: {
+			immediate: true,
+			handler(newVal){
+				this.songsSorted = newVal.sort((a,b) => {
+					if(a.album != b.album)
+						return a.album.localeCompare(b.album);
+					return a.track - b.track
+				});
+			}
 		}
 	},
 	template: /* html */`
@@ -20,9 +33,9 @@ export default {
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="song in songs" :key="song.id" @click="selectedId = song.id" @dblclick="$emit('play-song',song.id);" class="song-row" :class="[ selectedId == song.id ? 'table-primary' : '' ]">
-					<td>{{ String(song.track).split('/')[0] }}</td>
-					<td>{{ song.title }}</td>
+				<tr v-for="song in songsSorted" :key="song.id" @click="selectedId = song.id" @dblclick="$emit('play-song',song.id);" class="song-row" :class="[ selectedId == song.id ? 'table-primary' : '',currentSong?.id == song.id ? 'playing' : '' ]">
+					<td>{{ song.track }}</td>
+					<td class="title">{{ song.title }}</td>
 					<td>{{ song.genre }}</td>
 					<td>{{ song.artist }}</td>
 					<td>{{ song.album }}</td>

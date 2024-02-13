@@ -15,6 +15,7 @@ const app = Vue.createApp({
 			activeArtist: '',	//Active artist
 			activeAlbum: '',
 			allSongs: [],
+			currentSong: null,
 		}
 	},
 	computed: {
@@ -67,6 +68,7 @@ const app = Vue.createApp({
 			this.$refs.player.song = null;
 			await this.$nextTick();
 			this.$refs.player.song = song;
+			this.currentSong = song;
 		}
 	},
 	created(){
@@ -107,6 +109,7 @@ const app = Vue.createApp({
 				<div class="col-12">
 					<jb-songs
 						:songs="songsInAlbum"
+						:currentSong="currentSong"
 						@play-song="onPlaySong"
 					></jb-songs>
 				</div>

@@ -44,7 +44,7 @@ export default {
 			this.$emit('next');
 		},
 		onProgressClicked(event){
-			const rect = event.target.getBoundingClientRect();
+			const rect = event.target.closest('.progress').getBoundingClientRect();
 			const x = event.clientX - rect.left;
 			const width = rect.width;
 			const progress = x / width;
@@ -73,8 +73,8 @@ export default {
 	template: /* html */`
 		<div class="w-100 d-flex justify-content-between player">
 			<div class="song-info text-white">
-				<div>{{ song ? song.title : 'No song selected' }}</div>
-				<p>{{ song ? song.artist : '' }}</p>
+				<div class="fw-bold">{{ song ? song.title : 'No song selected' }}</div>
+				<div>{{ song?.artist || '-' }}</div>
 			</div>
 			<div class="controls d-flex flex-column justify-content-center">
 				<div class="btn-group">

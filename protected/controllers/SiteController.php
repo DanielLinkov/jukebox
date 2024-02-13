@@ -77,7 +77,7 @@ class SiteController extends Controller
 						'id'=>$id,
 						'url'=>$mediaRootUrl . '/' . substr($file, strlen($mediaRootPath) + 1),
 						'duration'=>$audio->duration,
-						'track'=>$audio->tags['track'] ?? 'Unknown Track',
+						'track'=>$audio->tags['track'] ? explode('/',$audio->tags['track'])[0] : NULL,
 						'title'=>trim($audio->tags['song'] ?? 'Unknown Title','?'),
 						'artist'=>$audio->tags['artist'] ?? 'Unknown Artist',
 						'album'=>$audio->tags['album'] ?? 'Unknown Album',

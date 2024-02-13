@@ -1,0 +1,32 @@
+
+.song-row  *{
+	user-select: none;
+	cursor: default;
+}
+.song-row.playing .title{
+	position: relative;
+}
+.song-row.playing .title::before{
+	content: "";
+	display:inline-block;
+	margin-right: 3px;
+	width: 16px;
+	height: 16px;
+	left:-16px;
+	top:12px;
+	background: url(../images/play-icon.gif) no-repeat 50% 50%;
+	background-size: 16px 16px;
+	position:absolute;
+	z-index: 10;
+}
+.player .controls{
+	width: 400px;
+	max-width: 100%;
+}
+.player .controls .progress{
+	cursor: pointer;
+	height:5px;
+}
+.player .controls .progress .progress-bar{
+	transition: width 0.03s ease;
+}
