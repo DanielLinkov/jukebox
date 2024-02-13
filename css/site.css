@@ -51,3 +51,14 @@ a.desc:after {
 	user-select: none;
 	cursor: default;
 }
+.player .controls{
+	width: 400px;
+	max-width: 100%;
+}
+.player .controls .progress{
+	cursor: pointer;
+	height:5px;
+}
+.player .controls .progress .progress-bar{
+	transition: width 0.03s ease;
+}

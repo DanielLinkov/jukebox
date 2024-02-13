@@ -14,7 +14,6 @@ const app = Vue.createApp({
 			activeGenre: '',	//Active genre
 			activeArtist: '',	//Active artist
 			activeAlbum: '',
-			songs: [],	//Filtered songs
 			allSongs: [],
 		}
 	},
@@ -71,7 +70,6 @@ const app = Vue.createApp({
 		}
 	},
 	created(){
-		this.songs = this.allSongs;	//Set filtered songs to all songs
 	},
 	template: /* html */ `
 		<div class="position-absolute">
@@ -114,7 +112,7 @@ const app = Vue.createApp({
 				</div>
 			</div>
 		</div>
-		<div class="position-fixed bottom-0 w-100 border-top border-2 border-primary bg-secondary p-3">
+		<div class="position-fixed bottom-0 w-100 border-top border-2 border-primary bg-secondary p-2">
 			<jb-player
 				ref="player"
 			></jb-player>
