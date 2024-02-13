@@ -77,7 +77,7 @@ export default {
 				<p>{{ song ? song.artist : '' }}</p>
 			</div>
 			<div class="controls d-flex flex-column justify-content-center">
-				<div class="btn-group me-2">
+				<div class="btn-group">
 					<button class="btn btn-secondary" title="Previous" @click="onPrevious"><i class="bi bi-skip-backward-fill"></i></button>
 					<button class="btn btn-secondary" title="Play/Pause" @click="onPlayPause"><i class="bi" :class="[ isPlaying ? 'bi-pause-fill' : 'bi-play-fill' ]"></i></button>
 					<button class="btn btn-secondary" title="Next" @click="onNext"><i class="bi bi-skip-forward-fill"></i></button>
