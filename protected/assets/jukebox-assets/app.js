@@ -2,6 +2,7 @@ import Songs from './components/songs.js';
 import Genres from './components/list-genres.js';
 import Artists from './components/list-artists.js';
 import Albums from './components/list-albums.js';
+import Player from './components/player.js';
 
 const app = Vue.createApp({
 	provide(){
@@ -14,44 +15,7 @@ const app = Vue.createApp({
 			activeArtist: '',	//Active artist
 			activeAlbum: '',
 			songs: [],	//Filtered songs
-			allSongs: [	//All songs
-				{
-					id: 1,
-					title: 'Song 1',
-					track: 1,
-					artist: 'Artist 1',
-					genre: 'Genre 1',
-					album: 'Album 1',
-					duration: '3:00'
-				},
-				{
-					id: 2,
-					title: 'Song 2',
-					track: 2,
-					artist: 'Artist 2',
-					genre: 'Genre 2',
-					album: 'Album 2',
-					duration: '3:30'
-				},
-				{
-					id: 3,
-					title: 'Song 3',
-					track: 3,
-					artist: 'Artist 3',
-					genre: 'Genre 1',
-					album: 'Album 3',
-					duration: '4:00'
-				},
-				{
-					id: 4,
-					title: 'Song 4',
-					track: 4,
-					artist: 'Artist 3',
-					genre: 'Genre 1',
-					album: 'Album 3',
-					duration: '4:10'
-				}
-			]
+			allSongs: [],
 		}
 	},
 	computed: {
@@ -95,9 +59,15 @@ const app = Vue.createApp({
 			fetch($url_rescan_media)
 				.then(response => response.json())
 				.then(data => {
-					console.log(data.list);
+					// console.log(data.list);
 					this.allSongs = data.list;
 				});
+		},
+		async onPlaySong(songId){
+			const song = this.allSongs.find(song => song.id === songId);
+			this.$refs.player.song = null;
+			await this.$nextTick();
+			this.$refs.player.song = song;
 		}
 	},
 	created(){
@@ -108,7 +78,7 @@ const app = Vue.createApp({
 			<button class="btn btn-sm btn-secondary" title="Process all media files" @click="onRescanMedia"><i class="bi bi-arrow-clockwise"></i></button>
 		</div>
 		<h2 class="text-center">Jukebox</h2>
-		<div class="container-fluid">
+		<div class="container-fluid mb-5 pb-2">
 			<div class="row">
 				<div class="col-md-4">
 					<jb-list-genres
@@ -139,9 +109,15 @@ const app = Vue.createApp({
 				<div class="col-12">
 					<jb-songs
 						:songs="songsInAlbum"
+						@play-song="onPlaySong"
 					></jb-songs>
 				</div>
 			</div>
+		</div>
+		<div class="position-fixed bottom-0 w-100 border-top border-2 border-primary bg-secondary p-3">
+			<jb-player
+				ref="player"
+			></jb-player>
 		</div>
 	`
 });
@@ -150,4 +126,5 @@ app.component('jb-songs', Songs);
 app.component('jb-list-genres', Genres);
 app.component('jb-list-artists', Artists);
 app.component('jb-list-album', Albums);
+app.component('jb-player', Player);
 app.mount('#app');

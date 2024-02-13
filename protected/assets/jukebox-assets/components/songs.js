@@ -1,8 +1,14 @@
 
 export default {
 	props: ['songs'],
+	emits: ['play-song'],
+	data(){
+		return {
+			selectedId: null
+		}
+	},
 	template: /* html */`
-		<table class="table table-striped">
+		<table class="table table-striped table-hover">
 			<thead>
 				<tr>
 					<th scope="col" width="60">Track</th>
@@ -14,14 +20,13 @@ export default {
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="song in songs" :key="song.id">
-					<td>{{ song.track }}</td>
+				<tr v-for="song in songs" :key="song.id" @click="selectedId = song.id" @dblclick="$emit('play-song',song.id);" class="song-row" :class="[ selectedId == song.id ? 'table-primary' : '' ]">
+					<td>{{ String(song.track).split('/')[0] }}</td>
 					<td>{{ song.title }}</td>
 					<td>{{ song.genre }}</td>
 					<td>{{ song.artist }}</td>
 					<td>{{ song.album }}</td>
-					<td><audio controls :src="song.url"></audio></td>
-					<!--<td>{{ Math.floor(song.duration / 60) }}:{{ Math.floor(song.duration % 60) }}</td>-->
+					<td class="text-end">{{ Math.floor(song.duration / 60) }}:{{ String(Math.floor(song.duration % 60)).padStart(2,0) }}</td>
 				</tr>
 			</tbody>
 		</table>

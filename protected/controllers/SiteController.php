@@ -69,11 +69,12 @@ class SiteController extends Controller
 		$mediaRootUrl = Yii::getAlias('@media_url');
 		$fileList = FileHelper::findFiles($mediaRootPath, ['only'=>['*.mp3','*.ogg','*.webm']], ['recursive'=>true]);
 		$fileData = [];
-		foreach($fileList as $file) {
+		foreach($fileList as $id=>$file) {
 			switch(substr($file, strrpos($file,'.') + 1)){
 				case 'mp3':
 					$audio = new Mp3Info($file, true);
 					$fileData[] = [
+						'id'=>$id,
 						'url'=>$mediaRootUrl . '/' . substr($file, strlen($mediaRootPath) + 1),
 						'duration'=>$audio->duration,
 						'track'=>$audio->tags['track'] ?? 'Unknown Track',
