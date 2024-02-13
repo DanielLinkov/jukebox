@@ -1,6 +1,7 @@
 import Songs from './components/songs.js';
 import Genres from './components/list-genres.js';
 import Artists from './components/list-artists.js';
+import Albums from './components/list-albums.js';
 
 const app = Vue.createApp({
 	provide(){
@@ -11,6 +12,7 @@ const app = Vue.createApp({
 		return {
 			activeGenre: '',	//Active genre
 			activeArtist: '',	//Active artist
+			activeAlbum: '',
 			songs: [],	//Filtered songs
 			allSongs: [	//All songs
 				{
@@ -58,6 +60,12 @@ const app = Vue.createApp({
 		songsInArtist() {
 			return this.songsInGenre.filter(song => !this.activeArtist || song.artist === this.activeArtist);
 		},
+		albums(){
+			return [...new Set(this.songsInArtist.map(song => song.album))];
+		},
+		songsInAlbum(){
+			return this.songsInArtist.filter(song => !this.activeAlbum || song.album === this.activeAlbum);
+		}
 	},
 	methods: {
 		onGenreSelected(genre) {
@@ -66,6 +74,10 @@ const app = Vue.createApp({
 		},
 		onArtistSelected(artist) {
 			this.activeArtist = artist;	//Set active genre
+			this.activeAlbum = '';	//Reset active album
+		},
+		onAlbumSelected(album) {
+			this.activeAlbum = album;	//Set active album
 		}
 	},
 	created(){
@@ -91,11 +103,19 @@ const app = Vue.createApp({
 						@selected="onArtistSelected"
 					></jb-list-artists>
 				</div>
+				<div class="col-md-4">
+					<jb-list-album
+						:activeAlbum="activeAlbum"
+						:albums="albums"
+						:songsInArtist="songsInArtist"
+						@selected="onAlbumSelected"
+					></jb-list-album>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-12">
 					<jb-songs
-						:songs="songsInArtist"
+						:songs="songsInAlbum"
 					></jb-songs>
 				</div>
 			</div>
@@ -106,4 +126,5 @@ const app = Vue.createApp({
 app.component('jb-songs', Songs);
 app.component('jb-list-genres', Genres);
 app.component('jb-list-artists', Artists);
+app.component('jb-list-album', Albums);
 app.mount('#app');

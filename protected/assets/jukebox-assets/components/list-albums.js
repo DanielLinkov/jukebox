@@ -1,24 +1,22 @@
 
 export default{
-	inject: ['allSongs','activeGenre'],
 	emits: ['selected'],
+	props: ['songsInArtist','albums','activeAlbum'],
 	data(){
 		return {
-			genres: [],
 		}
 	},
 	created(){
-		this.genres = [...new Set(this.allSongs.map(song => song.genre))];	//Get unique genres
 	},
 	template: /* html */`
 		<div>
-			<h5>Genre</h5>
+			<h5>Album</h5>
 			<div class="list-group">
-				<a class="list-group-item list-group-item-action" :class="[ !activeGenre ? 'active' : '' ]" href="#" @click="$emit('selected','')">
-					All {{ genres.length }} genres ({{ allSongs.length }})
+				<a class="list-group-item list-group-item-action" :class="[ !activeAlbum ? 'active' : '' ]" href="#" @click="$emit('selected','')">
+					All {{ albums.length }} albums ({{ songsInArtist.length }})
 				</a>
-				<a v-for="genre in genres" :key="genre" class="list-group-item list-group-item-action" :class="[ genre == activeGenre ? 'active' : '' ]" href="#" @click="$emit('selected',genre)">
-					{{ genre }} ({{ allSongs.filter(song => song.genre === genre).length }})
+				<a v-for="album in albums" :key="album" class="list-group-item list-group-item-action" :class="[ album == activeAlbum ? 'active' : '' ]" href="#" @click="$emit('selected',album)">
+					{{ album }} ({{ songsInArtist.filter(song => song.album === album).length }})
 				</a>
 			</div>
 		</div>
