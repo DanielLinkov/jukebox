@@ -6,6 +6,8 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\helpers\FileHelper;
+use wapmorgan\Mp3Info\Mp3Info;
 
 class SiteController extends Controller
 {
@@ -60,5 +62,31 @@ class SiteController extends Controller
     {
         return $this->render('index');
     }
+
+	public function actionRescan_media()
+	{
+		$mediaRootPath = Yii::getAlias('@media_root');
+		$mediaRootUrl = Yii::getAlias('@media_url');
+		$fileList = FileHelper::findFiles($mediaRootPath, ['only'=>['*.mp3','*.ogg','*.webm']], ['recursive'=>true]);
+		$fileData = [];
+		foreach($fileList as $file) {
+			switch(substr($file, strrpos($file,'.') + 1)){
+				case 'mp3':
+					$audio = new Mp3Info($file, true);
+					$fileData[] = [
+						'url'=>$mediaRootUrl . '/' . substr($file, strlen($mediaRootPath) + 1),
+						'duration'=>$audio->duration,
+						'track'=>$audio->tags['track'] ?? 'Unknown Track',
+						'title'=>trim($audio->tags['song'] ?? 'Unknown Title','?'),
+						'artist'=>$audio->tags['artist'] ?? 'Unknown Artist',
+						'album'=>$audio->tags['album'] ?? 'Unknown Album',
+						'year'=>$audio->tags['year'] ?? 'Unknown Year',
+						'genre'=>$audio->tags['genre'] ?? 'Unknown Genre',
+					];
+					break;
+			}
+		}
+		return $this->asJson(['list'=>$fileData]);
+	}
 
 }

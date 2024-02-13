@@ -41,6 +41,15 @@ const app = Vue.createApp({
 					genre: 'Genre 1',
 					album: 'Album 3',
 					duration: '4:00'
+				},
+				{
+					id: 4,
+					title: 'Song 4',
+					track: 4,
+					artist: 'Artist 3',
+					genre: 'Genre 1',
+					album: 'Album 3',
+					duration: '4:10'
 				}
 			]
 		}
@@ -78,12 +87,26 @@ const app = Vue.createApp({
 		},
 		onAlbumSelected(album) {
 			this.activeAlbum = album;	//Set active album
+		},
+		onRescanMedia(){
+			this.activeGenre = '';
+			this.activeArtist = '';
+			this.activeAlbum = '';
+			fetch($url_rescan_media)
+				.then(response => response.json())
+				.then(data => {
+					console.log(data.list);
+					this.allSongs = data.list;
+				});
 		}
 	},
 	created(){
 		this.songs = this.allSongs;	//Set filtered songs to all songs
 	},
 	template: /* html */ `
+		<div class="position-absolute">
+			<button class="btn btn-sm btn-secondary" title="Process all media files" @click="onRescanMedia"><i class="bi bi-arrow-clockwise"></i></button>
+		</div>
 		<h2 class="text-center">Jukebox</h2>
 		<div class="container-fluid">
 			<div class="row">

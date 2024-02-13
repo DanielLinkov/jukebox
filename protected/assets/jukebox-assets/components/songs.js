@@ -20,7 +20,8 @@ export default {
 					<td>{{ song.genre }}</td>
 					<td>{{ song.artist }}</td>
 					<td>{{ song.album }}</td>
-					<td>{{ song.duration }}</td>
+					<td><audio controls :src="song.url"></audio></td>
+					<!--<td>{{ Math.floor(song.duration / 60) }}:{{ Math.floor(song.duration % 60) }}</td>-->
 				</tr>
 			</tbody>
 		</table>
