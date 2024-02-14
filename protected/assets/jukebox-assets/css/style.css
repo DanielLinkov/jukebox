@@ -17,7 +17,6 @@
 	background: url(../images/play-icon.gif) no-repeat 50% 50%;
 	background-size: 16px 16px;
 	position:absolute;
-	z-index: 10;
 }
 .player .controls{
 	width: 400px;

@@ -89,8 +89,8 @@ export default {
 		},30);
 	},
 	template: /* html */`
-		<div class="w-100 d-flex justify-content-between player">
-			<div class="song-info text-white">
+		<div class="w-100 d-flex flex-column player z-3">
+			<div class="song-info text-white position-absolute start-0 ps-2">
 				<div title="Song title" class="fw-bold">[{{ song?.track }}] {{ song ? song.title : 'No song selected' }}</div>
 				<div>
 					<span title="Artist">{{ song?.artist || '—' }}</span>
@@ -100,7 +100,7 @@ export default {
 					<span title="Year">{{ song?.year || '—' }}</span>
 				</div>
 			</div>
-			<div class="controls d-flex flex-column justify-content-center">
+			<div class="controls d-flex flex-column justify-content-center mx-auto">
 				<div class="btn-group mx-auto">
 					<button class="btn btn-secondary" title="Shuffle" @click="onShuffle"><i class="bi bi-shuffle"></i></button>
 					<button class="btn btn-secondary" title="Previous" @click="onPrevious"><i class="bi bi-skip-backward-fill"></i></button>
@@ -116,7 +116,7 @@ export default {
 					<div ref="songDuration" class="text-white text-end d-inline-block" style="width:4.2rem;">&mdash;</div>
 				</div>
 			</div>
-			<div class="volume pt-2">
+			<div class="volume pt-2 position-absolute end-0 pe-2">
 				<div class="bg-primary py-1 px-2 rounded-5 d-flex align-items-center gap-1">
 					<i class="bi" :class="[ isMute ? 'bi-volume-mute-fill' : 'bi-volume-off-fill' ]"></i>
 					<input @input="onVolumeSlide" ref="volumeSlider" type="range" value="0.5" class="form-range" min="0" max="1" step="0.02">
