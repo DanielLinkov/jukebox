@@ -92,7 +92,13 @@ export default {
 		<div class="w-100 d-flex justify-content-between player">
 			<div class="song-info text-white">
 				<div title="Song title" class="fw-bold">[{{ song?.track }}] {{ song ? song.title : 'No song selected' }}</div>
-				<div title="Artist">{{ song?.artist || '-' }}</div>
+				<div>
+					<span title="Artist">{{ song?.artist || '—' }}</span>
+					&bull;
+					<span title="Album">{{ song?.album || '—' }}</span>
+					&bull;
+					<span title="Year">{{ song?.year || '—' }}</span>
+				</div>
 			</div>
 			<div class="controls d-flex flex-column justify-content-center">
 				<div class="btn-group mx-auto">
