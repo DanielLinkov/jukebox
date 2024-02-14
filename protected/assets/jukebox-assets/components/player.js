@@ -19,6 +19,7 @@ export default {
 			song: null,
 			url: null,
 			isPlaying: false,
+			isMute: false
 		}
 	},
 	computed : {
@@ -29,6 +30,7 @@ export default {
 		onVolumeSlide(event){
 			this.$refs.audio.volume = event.target.value;
 			localStorage.setItem('jukebox:volume', event.target.value);
+			this.isMute = event.target.value == 0;
 		},
 		onPrevious() {
 			this.$emit('previous');
@@ -65,6 +67,7 @@ export default {
 		const volume = localStorage.getItem('jukebox:volume') || 0.5;
 		this.$refs.audio.volume = volume;
 		this.$refs.volumeSlider.value = volume;
+		this.isMute = volume == 0;
 
 		this.$refs.audio.addEventListener('canplay', () => {
 			this.$refs.audio.play();
@@ -76,6 +79,7 @@ export default {
 		});
 		this.$refs.audio.addEventListener('ended', () => {
 			this.$emit('ended');
+			this.isPlaying = false;
 		});
 		setInterval(() => {
 			if(this.song && this.isPlaying){
@@ -108,7 +112,7 @@ export default {
 			</div>
 			<div class="volume pt-2">
 				<div class="bg-primary py-1 px-2 rounded-5 d-flex align-items-center gap-1">
-					<i class="bi bi-volume-off-fill"></i>
+					<i class="bi" :class="[ isMute ? 'bi-volume-mute-fill' : 'bi-volume-off-fill' ]"></i>
 					<input @input="onVolumeSlide" ref="volumeSlider" type="range" value="0.5" class="form-range" min="0" max="1" step="0.02">
 					<i class="bi bi-volume-up-fill"></i>
 				</div>
