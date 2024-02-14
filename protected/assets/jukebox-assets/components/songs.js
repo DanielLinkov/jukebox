@@ -12,6 +12,7 @@ export default {
 		songs: {
 			immediate: true,
 			handler(newVal){
+				this.selectedId = null;
 				this.songsSorted = newVal.sort((a,b) => {
 					if(a.album != b.album)
 						return a.album.localeCompare(b.album);
