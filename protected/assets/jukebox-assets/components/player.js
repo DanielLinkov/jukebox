@@ -72,7 +72,6 @@ export default {
 		this.$refs.audio.addEventListener('canplay', () => {
 			this.$refs.audio.play();
 			this.isPlaying = true;
-			this.$refs.songDuration.textContent = `${String(Math.floor(this.$refs.audio.duration / 60)).padStart(2,0)}:${String(Math.floor(this.$refs.audio.duration % 60)).padStart(2,0)}`;
 		});
 		this.$refs.audio.addEventListener('play', () => {
 			this.$emit('play');
@@ -85,6 +84,7 @@ export default {
 			if(this.song && this.isPlaying){
 				this.$refs.playbackProgress.style.width = (this.$refs.audio.currentTime / this.$refs.audio.duration * 100) + '%';
 				this.$refs.songProgressTime.textContent = `${String(Math.floor(this.$refs.audio.currentTime / 60)).padStart(2,0)}:${String(Math.floor(this.$refs.audio.currentTime % 60)).padStart(2,0)}`;
+				this.$refs.songDuration.textContent = `${String(Math.floor(this.$refs.audio.duration / 60)).padStart(2,0)}:${String(Math.floor(this.$refs.audio.duration % 60)).padStart(2,0)}`;
 			}
 		},30);
 	},

@@ -7,7 +7,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\helpers\FileHelper;
-use getID3;
+use app\helpers\FileInfo;
+use app\models\Song;
 
 class SiteController extends Controller
 {
@@ -68,29 +69,29 @@ class SiteController extends Controller
 		$mediaRootPath = Yii::getAlias('@media_root');
 		$mediaRootUrl = Yii::getAlias('@media_url');
 		$fileList = FileHelper::findFiles($mediaRootPath, ['only'=>['*.mp3','*.ogg','*.webm']], ['recursive'=>true]);
-		$fileData = [];
-		$getID3 = new getID3;
+		Song::deleteAll();
 		foreach($fileList as $id=>$file) {
 			switch(substr($file, strrpos($file,'.') + 1)){
 				case 'mp3':
 				case 'ogg':
-					$fileInfo = $getID3->analyze($file);
-					$getID3->CopyTagsToComments($fileInfo);
-					$fileData[] = [
-						'id'=>$id,
-						'url'=>$mediaRootUrl . '/' . substr($file, strlen($mediaRootPath) + 1),
-						'duration'=>$fileInfo['playtime_string'],
-						'track'=>$fileInfo['comments']['track_number'][0] ?? NULL,
-						'title'=>$fileInfo['comments']['title'][0] ?? NULL,
-						'artist'=>$fileInfo['comments']['artist'][0] ?? NULL,
-						'album'=>$fileInfo['comments']['album'][0] ?? NULL,
-						'year'=>$fileInfo['comments']['year'][0] ?? NULL,
-						'genre'=>$fileInfo['comments']['genre'][0] ?? NULL,
-					];
+					$fileData = FileInfo::getData($file);
+					// if($id == 1) return print_r($fileData,true);
+					$fileData['id'] = $id;
+					$fileData['url'] = $mediaRootUrl . '/' . substr($file, strlen($mediaRootPath) + 1);
+					$song = new Song;
+					$song->title = $fileData['title'];
+					$song->track = $fileData['track'];
+					$song->artist = $fileData['artist'];
+					$song->album = $fileData['album'];
+					$song->year = $fileData['year'];
+					$song->genre = $fileData['genre'];
+					$song->duration = $fileData['duration'];
+					if(!$song->save())
+						return $this->asJson(['error'=>$song->errors]);
 					break;
 			}
 		}
-		return $this->asJson(['list'=>$fileData]);
+		return $this->asJson(['status'=>'ok']);
 	}
 
 }
