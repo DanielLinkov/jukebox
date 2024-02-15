@@ -15,9 +15,10 @@ export default{
 	},
 	methods: {
 		onSetQueueToAlbum(album){
-			const songsInAlbum = this.songsInArtist.filter(song => song.album === album);
+			const songsInAlbum = album !== null ? this.songsInArtist.filter(song => song.album === album) : this.songsInArtist;
 			songsInAlbum.sort((a,b) => a.track - b.track);
-			this.$emit('set-queue',songsInAlbum,true);
+			if(songsInAlbum.length > 0)
+				this.$emit('set-queue',songsInAlbum,songsInAlbum[0].id);
 		}
 	},
 	created(){
@@ -26,7 +27,14 @@ export default{
 		<div>
 			<h5>Album</h5>
 			<div class="list-group">
-				<a class="list-group-item list-group-item-action fw-bold" :class="[ !activeAlbum ? 'active' : '' ]" href="#" @click.prevent="$emit('selected','')">
+				<a
+					class="list-group-item list-group-item-action fw-bold"
+					:class="[ !activeAlbum ? 'active' : '' ]"
+					href="#"
+					@click.prevent="$emit('selected','')"
+					@dblclick.prevent="onSetQueueToAlbum(null)"
+					@touchstart="onSetQueueToAlbum(null)"
+				>
 					All {{ albums.length }} albums ({{ songsInArtist.length }})
 				</a>
 				<a
@@ -38,6 +46,7 @@ export default{
 					:class="[ album == activeAlbum ? 'active' : '' ]"
 					@click.prevent="$emit('selected',album)"
 					@dblclick.prevent="onSetQueueToAlbum(album)"
+					@touchstart="onSetQueueToAlbum(album)"
 				>
 					{{ album }} ({{ songsInArtist.filter(song => song.album === album).length }})
 				</a>
