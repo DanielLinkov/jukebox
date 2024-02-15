@@ -1,8 +1,9 @@
 
 export default {
-	// props: ['song'],
+	inject: ['playQueue'],
+	emit: ['playing','pause','previous','next','shuffle','repeat'],
 	watch: {
-		async song(newVal,oldVal){
+		song(newVal,oldVal){
 			if(newVal){
 				this.url = newVal.url;
 				this.$refs.audio.load();
@@ -27,13 +28,46 @@ export default {
 		}
 	},
 	methods: {
+		async play(songIdToPlay){
+			this.song = this.playQueue.find(song => song.id === songIdToPlay) || null;
+			if(!this.song)
+				return;
+			await this.$nextTick();
+			this.$refs.audio.play();
+			this.isPlaying = true;
+			this.$emit('playing',this.song.id);
+		},
+		playNext(){
+			if(!this.song)
+				return;
+			const index = this.playQueue.findIndex(song => song.id === this.song.id);
+			if(index === -1)
+				return;
+			if(index < this.playQueue.length - 1){
+				this.play(this.playQueue[index + 1].id);
+			}else{
+				this.isPlaying = false;
+			}
+		},
+		playPrevious(){
+			if(!this.song)
+				return;
+			const index = this.playQueue.findIndex(song => song.id === this.song.id);
+			if(index === -1)
+				return;
+			if(index > 0){
+				this.play(this.playQueue[index - 1].id);
+			}else{
+				this.$refs.audio.currentTime = 0;
+			}
+		},
 		onVolumeSlide(event){
 			this.$refs.audio.volume = event.target.value;
 			localStorage.setItem('jukebox:volume', event.target.value);
 			this.isMute = event.target.value == 0;
 		},
 		onPrevious() {
-			this.$emit('previous');
+			this.playPrevious();
 		},
 		onPlayPause() {
 			if(this.isPlaying){
@@ -43,11 +77,11 @@ export default {
 			}else if (this.url){
 				this.$refs.audio.play();
 				this.isPlaying = true;
-				this.$emit('play');
+				this.$emit('playing',this.song.id);
 			}
 		},
 		onNext() {
-			this.$emit('next');
+			this.playNext();
 		},
 		onShuffle() {
 			this.$emit('shuffle');
@@ -74,11 +108,13 @@ export default {
 			this.isPlaying = true;
 		});
 		this.$refs.audio.addEventListener('play', () => {
-			this.$emit('play');
+			this.$emit('playing',this.song.id);
 		});
 		this.$refs.audio.addEventListener('ended', () => {
 			this.$emit('ended');
-			this.isPlaying = false;
+			if(this.isPlaying){
+				this.playNext();		
+			}
 		});
 		setInterval(() => {
 			if(this.song && this.isPlaying){

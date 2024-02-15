@@ -7,6 +7,7 @@ import Player from './components/player.js';
 const app = Vue.createApp({
 	provide(){
 		return {
+			playQueue: Vue.computed(() => this.playQueue)
 		}
 	},
 	data() {
@@ -77,12 +78,14 @@ const app = Vue.createApp({
 					this.allSongs = data.songs;
 				});
 		},
-		async onPlaySong(songId){
-			const song = this.allSongs.find(song => song.id === songId);
-			this.$refs.player.song = null;
-			await this.$nextTick();
-			this.$refs.player.song = song;
-			this.currentSong = song;
+		setPlayQueue(songs, play = false){
+			this.playQueue = songs;
+			if(play && songs.length > 0){
+				this.$refs.player.play(songs[0].id);
+			}
+		},
+		onPlaying(songId){
+			this.currentSong = this.allSongs.find(song => song.id === songId);
 		}
 	},
 	created(){
@@ -117,6 +120,7 @@ const app = Vue.createApp({
 						:albums="albums"
 						:songsInArtist="songsInArtist"
 						@selected="onAlbumSelected"
+						@set-queue="setPlayQueue"
 					></jb-list-album>
 				</div>
 			</div>
@@ -125,7 +129,7 @@ const app = Vue.createApp({
 					<jb-songs
 						:songs="songsInAlbum"
 						:currentSong="currentSong"
-						@play-song="onPlaySong"
+						@play-song=""
 					></jb-songs>
 				</div>
 			</div>
@@ -133,6 +137,7 @@ const app = Vue.createApp({
 		<div class="position-fixed bottom-0 w-100 border-top border-2 border-primary bg-secondary p-2">
 			<jb-player
 				ref="player"
+				@playing="onPlaying"
 			></jb-player>
 		</div>
 	`

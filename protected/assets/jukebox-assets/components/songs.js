@@ -34,7 +34,7 @@ export default {
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="song in songsSorted" :key="song.id" @click="selectedId = song.id" @dblclick="$emit('play-song',song.id);" class="song-row" :class="[ selectedId == song.id ? 'table-primary' : '',currentSong?.id == song.id ? 'playing' : '' ]">
+				<tr v-for="song in songsSorted" :key="song.id" @click="selectedId = song.id" @dblclick="$emit('play-song',song.id);" @touchstart="$emit('play-song',song.id)" class="song-row" :class="[ selectedId == song.id ? 'table-primary' : '',currentSong?.id == song.id ? 'playing' : '' ]">
 					<td>{{ song.track }}</td>
 					<td class="title">{{ song.title }}</td>
 					<td>{{ song.genre }}</td>

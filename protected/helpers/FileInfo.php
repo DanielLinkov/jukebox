@@ -9,7 +9,7 @@ class FileInfo{
 		if(!self::$getID3)
 			self::$getID3 = new \getID3;
 		$fileInfo = self::$getID3->analyze($file);
-		if($fileInfo['error'])
+		if(isset($fileInfo['error']))
 			throw new \Exception($fileInfo['error']);
 		self::$getID3->CopyTagsToComments($fileInfo);
 		return [
