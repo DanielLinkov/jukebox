@@ -88,10 +88,11 @@ const app = Vue.createApp({
 					this.allSongs = data.songs;
 				});
 		},
-		setPlayQueue(songs, play = false){
+		setPlayQueue(songs, playSongId = null){
 			this.playQueue = songs;
-			if(play && songs.length > 0){
-				this.$refs.player.play(songs[0].id);
+			let song = null;
+			if(playSongId && (song = songs.find(song => song.id === playSongId))){
+				this.$refs.player.play(song.id);
 			}
 		},
 		onPlaying(songId){

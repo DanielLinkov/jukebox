@@ -28,9 +28,11 @@ export default {
 		}
 	},
 	methods: {
-		async play(songIdToPlay){
+		async play(songIdToPlay,play=true){
 			this.song = this.playQueue.find(song => song.id === songIdToPlay) || null;
 			if(!this.song)
+				return;
+			if(!play)
 				return;
 			await this.$nextTick();
 			this.$refs.audio.play();
@@ -44,7 +46,7 @@ export default {
 			if(index === -1)
 				return;
 			if(index < this.playQueue.length - 1){
-				this.play(this.playQueue[index + 1].id);
+				this.play(this.playQueue[index + 1].id,this.isPlaying);
 			}else{
 				this.isPlaying = false;
 			}
@@ -56,7 +58,7 @@ export default {
 			if(index === -1)
 				return;
 			if(index > 0){
-				this.play(this.playQueue[index - 1].id);
+				this.play(this.playQueue[index - 1].id,this.isPlaying);
 			}else{
 				this.$refs.audio.currentTime = 0;
 			}
@@ -112,8 +114,10 @@ export default {
 		this.isMute = volume == 0;
 
 		this.$refs.audio.addEventListener('canplay', () => {
-			this.$refs.audio.play();
-			this.isPlaying = true;
+			if(this.isPlaying)
+				this.$refs.audio.play();
+			else
+				this.$refs.audio.pause();
 		});
 		this.$refs.audio.addEventListener('play', () => {
 			this.$emit('playing',this.song.id);
