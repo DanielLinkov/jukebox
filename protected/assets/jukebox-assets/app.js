@@ -57,10 +57,23 @@ const app = Vue.createApp({
 			this.activeArtist = '';
 			this.activeAlbum = '';
 			fetch($url_scan_media)
+				.then(response=>{
+					if(!response.ok){
+						throw new Error('Error scanning media');
+					}
+				})
+				.then(data => {
+					this.fetchSongs();
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		},
+		fetchSongs(){
+			fetch($url_fetch_songs)
 				.then(response => response.json())
 				.then(data => {
-					// console.log(data.list);
-					this.allSongs = data.list;
+					this.allSongs = data.songs;
 				});
 		},
 		async onPlaySong(songId){
@@ -72,6 +85,7 @@ const app = Vue.createApp({
 		}
 	},
 	created(){
+		this.fetchSongs();
 	},
 	template: /* html */ `
 		<div class="position-absolute">

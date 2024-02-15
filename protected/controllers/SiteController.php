@@ -76,8 +76,6 @@ class SiteController extends Controller
 				case 'ogg':
 					$fileData = FileInfo::getData($file);
 					// if($id == 1) return print_r($fileData,true);
-					$fileData['id'] = $id;
-					$fileData['url'] = $mediaRootUrl . '/' . substr($file, strlen($mediaRootPath) + 1);
 					$song = new Song;
 					$song->title = $fileData['title'];
 					$song->track = $fileData['track'];
@@ -86,12 +84,18 @@ class SiteController extends Controller
 					$song->year = $fileData['year'];
 					$song->genre = $fileData['genre'];
 					$song->duration = $fileData['duration'];
+					$song->url = $mediaRootUrl . '/' . substr($file, strlen($mediaRootPath) + 1);
 					if(!$song->save())
 						return $this->asJson(['error'=>$song->errors]);
 					break;
 			}
 		}
 		return $this->asJson(['status'=>'ok']);
+	}
+	public function actionFetch_songs()
+	{
+		$songs = Song::find()->asArray()->all();
+		return $this->asJson(['status'=>'ok','songs'=>$songs]);
 	}
 
 }
