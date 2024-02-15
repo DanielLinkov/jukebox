@@ -61,7 +61,8 @@ const app = Vue.createApp({
 		},
 		onSelectAlbum(album){
 			this.activeGenre = '';
-			this.activeArtist = '';
+			const artist = this.allSongs.find(song => song.album === album)?.artist || '';
+			this.activeArtist = this.allSongs.filter(song => song.artist === artist && song.album === album).length == this.allSongs.filter(song => song.album === album).length ? artist : '';
 			this.activeAlbum = album;
 		},
 		onScanMedia(){

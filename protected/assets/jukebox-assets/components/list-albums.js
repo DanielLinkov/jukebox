@@ -33,7 +33,6 @@ export default{
 					href="#"
 					@click.prevent="$emit('selected','')"
 					@dblclick.prevent="onSetQueueToAlbum(null)"
-					@touchstart="onSetQueueToAlbum(null)"
 				>
 					All {{ albums.length }} albums ({{ songsInArtist.length }})
 				</a>
@@ -46,7 +45,6 @@ export default{
 					:class="[ album == activeAlbum ? 'active' : '' ]"
 					@click.prevent="$emit('selected',album)"
 					@dblclick.prevent="onSetQueueToAlbum(album)"
-					@touchstart="onSetQueueToAlbum(album)"
 				>
 					{{ album }} ({{ songsInArtist.filter(song => song.album === album).length }})
 				</a>
