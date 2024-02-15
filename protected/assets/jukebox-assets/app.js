@@ -54,6 +54,16 @@ const app = Vue.createApp({
 		onAlbumSelected(album) {
 			this.activeAlbum = album;	//Set active album
 		},
+		onSelectArtist(artist){
+			this.activeGenre = '';
+			this.activeArtist = artist;
+			this.activeAlbum = '';
+		},
+		onSelectAlbum(album){
+			this.activeGenre = '';
+			this.activeArtist = '';
+			this.activeAlbum = album;
+		},
 		onScanMedia(){
 			this.activeGenre = '';
 			this.activeArtist = '';
@@ -129,7 +139,7 @@ const app = Vue.createApp({
 					<jb-songs
 						:songs="songsInAlbum"
 						:currentSong="currentSong"
-						@play-song=""
+						@set-queue="setPlayQueue"
 					></jb-songs>
 				</div>
 			</div>
@@ -138,6 +148,8 @@ const app = Vue.createApp({
 			<jb-player
 				ref="player"
 				@playing="onPlaying"
+				@select-artist="onSelectArtist"
+				@select-album="onSelectAlbum"
 			></jb-player>
 		</div>
 	`

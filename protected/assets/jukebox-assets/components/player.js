@@ -1,7 +1,7 @@
 
 export default {
 	inject: ['playQueue'],
-	emit: ['playing','pause','previous','next','shuffle','repeat'],
+	emit: ['playing','pause','previous','next','shuffle','repeat','select-artist','select-album'],
 	watch: {
 		song(newVal,oldVal){
 			if(newVal){
@@ -95,6 +95,14 @@ export default {
 			const width = rect.width;
 			const progress = x / width;
 			this.$refs.audio.currentTime = this.$refs.audio.duration * progress;
+		},
+		selectArtist(){
+			if(this.song?.artist)
+				this.$emit('select-artist',this.song.artist);
+		},
+		selectAlbum(){
+			if(this.song?.album)
+				this.$emit('select-album',this.song.album);
 		}
 	},
 	mounted(){
@@ -129,9 +137,9 @@ export default {
 			<div class="song-info text-white position-absolute start-0 ps-2">
 				<div title="Song title" class="fw-bold">[{{ song?.track }}] {{ song ? song.title : 'No song selected' }}</div>
 				<div>
-					<a href="#" title="Artist" class="text-white">{{ song?.artist || '—' }}</a>
+					<a href="#" title="Artist" class="text-white" @click="selectArtist">{{ song?.artist || '—' }}</a>
 					&bull;
-					<a href="#" title="Album" class="text-white">{{ song?.album || '—' }}</a>
+					<a href="#" title="Album" class="text-white" @click="selectAlbum">{{ song?.album || '—' }}</a>
 					&bull;
 					<span title="Year">{{ song?.year || '—' }}</span>
 				</div>
