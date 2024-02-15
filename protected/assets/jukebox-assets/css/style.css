@@ -1,3 +1,9 @@
+a{
+	text-decoration: none;
+}
+a:hover{
+	text-decoration: underline;
+}
 
 .song-row  *{
 	user-select: none;

@@ -75,7 +75,6 @@ class SiteController extends Controller
 				case 'mp3':
 				case 'ogg':
 					$fileData = FileInfo::getData($file);
-					// if($id == 1) return print_r($fileData,true);
 					$song = new Song;
 					$song->title = $fileData['title'];
 					$song->track = $fileData['track'];

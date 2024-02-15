@@ -8,12 +8,10 @@ class FileInfo{
 	public static function getData($file){
 		if(!self::$getID3)
 			self::$getID3 = new \getID3;
-		try{
-			$fileInfo = self::$getID3->analyze($file);
-			self::$getID3->CopyTagsToComments($fileInfo);
-		}catch(\Exception $e){
-			return NULL;
-		}
+		$fileInfo = self::$getID3->analyze($file);
+		if($fileInfo['error'])
+			throw new \Exception($fileInfo['error']);
+		self::$getID3->CopyTagsToComments($fileInfo);
 		return [
 			'duration'=>$fileInfo['playtime_string'],
 			'track'=>$fileInfo['comments']['track_number'][0] ?? NULL,
@@ -22,7 +20,6 @@ class FileInfo{
 			'album'=>$fileInfo['comments']['album'][0] ?? NULL,
 			'year'=>$fileInfo['comments']['year'][0] ?? NULL,
 			'genre'=>$fileInfo['comments']['genre'][0] ?? NULL,
-			// 'allInfo'=>$fileInfo
 		];
 	}
 }

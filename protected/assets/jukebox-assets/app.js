@@ -16,6 +16,7 @@ const app = Vue.createApp({
 			activeAlbum: '',
 			allSongs: [],
 			currentSong: null,
+			playQueue: [],
 		}
 	},
 	computed: {

@@ -14,6 +14,9 @@ class JukeboxAsset extends \yii\web\AssetBundle
 			'position' => \yii\web\View::POS_END
 		]
 	];
+	public $depends = [
+		'app\assets\AppAsset',
+	];
 	public $publishOptions = [
 		'forceCopy' => 1
 	];

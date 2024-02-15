@@ -93,9 +93,9 @@ export default {
 			<div class="song-info text-white position-absolute start-0 ps-2">
 				<div title="Song title" class="fw-bold">[{{ song?.track }}] {{ song ? song.title : 'No song selected' }}</div>
 				<div>
-					<span title="Artist">{{ song?.artist || '—' }}</span>
+					<a href="#" title="Artist" class="text-white">{{ song?.artist || '—' }}</a>
 					&bull;
-					<span title="Album">{{ song?.album || '—' }}</span>
+					<a href="#" title="Album" class="text-white">{{ song?.album || '—' }}</a>
 					&bull;
 					<span title="Year">{{ song?.year || '—' }}</span>
 				</div>
