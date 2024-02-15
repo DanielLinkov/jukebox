@@ -52,11 +52,11 @@ const app = Vue.createApp({
 		onAlbumSelected(album) {
 			this.activeAlbum = album;	//Set active album
 		},
-		onRescanMedia(){
+		onScanMedia(){
 			this.activeGenre = '';
 			this.activeArtist = '';
 			this.activeAlbum = '';
-			fetch($url_rescan_media)
+			fetch($url_scan_media)
 				.then(response => response.json())
 				.then(data => {
 					// console.log(data.list);
@@ -75,7 +75,7 @@ const app = Vue.createApp({
 	},
 	template: /* html */ `
 		<div class="position-absolute">
-			<button class="btn btn-sm btn-secondary" title="Process all media files" @click="onRescanMedia"><i class="bi bi-arrow-clockwise"></i></button>
+			<button class="btn btn-sm btn-secondary" title="Process all media files" @click="onScanMedia"><i class="bi bi-arrow-clockwise"></i></button>
 		</div>
 		<h2 class="text-center">Jukebox</h2>
 		<div class="container-fluid mb-5 pb-3">

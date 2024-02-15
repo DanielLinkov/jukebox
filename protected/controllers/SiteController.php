@@ -7,7 +7,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\helpers\FileHelper;
-use wapmorgan\Mp3Info\Mp3Info;
+use getID3;
 
 class SiteController extends Controller
 {
@@ -63,26 +63,29 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
-	public function actionRescan_media()
+	public function actionScan_media()
 	{
 		$mediaRootPath = Yii::getAlias('@media_root');
 		$mediaRootUrl = Yii::getAlias('@media_url');
 		$fileList = FileHelper::findFiles($mediaRootPath, ['only'=>['*.mp3','*.ogg','*.webm']], ['recursive'=>true]);
 		$fileData = [];
+		$getID3 = new getID3;
 		foreach($fileList as $id=>$file) {
 			switch(substr($file, strrpos($file,'.') + 1)){
 				case 'mp3':
-					$audio = new Mp3Info($file, true);
+				case 'ogg':
+					$fileInfo = $getID3->analyze($file);
+					$getID3->CopyTagsToComments($fileInfo);
 					$fileData[] = [
 						'id'=>$id,
 						'url'=>$mediaRootUrl . '/' . substr($file, strlen($mediaRootPath) + 1),
-						'duration'=>$audio->duration,
-						'track'=>$audio->tags['track'] ? explode('/',$audio->tags['track'])[0] : NULL,
-						'title'=>trim($audio->tags['song'] ?? 'Unknown Title','?'),
-						'artist'=>$audio->tags['artist'] ?? 'Unknown Artist',
-						'album'=>$audio->tags['album'] ?? 'Unknown Album',
-						'year'=>$audio->tags['year'] ?? 'Unknown Year',
-						'genre'=>$audio->tags['genre'] ?? 'Unknown Genre',
+						'duration'=>$fileInfo['playtime_string'],
+						'track'=>$fileInfo['comments']['track_number'][0] ?? NULL,
+						'title'=>$fileInfo['comments']['title'][0] ?? NULL,
+						'artist'=>$fileInfo['comments']['artist'][0] ?? NULL,
+						'album'=>$fileInfo['comments']['album'][0] ?? NULL,
+						'year'=>$fileInfo['comments']['year'][0] ?? NULL,
+						'genre'=>$fileInfo['comments']['genre'][0] ?? NULL,
 					];
 					break;
 			}

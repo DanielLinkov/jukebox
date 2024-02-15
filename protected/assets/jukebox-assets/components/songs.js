@@ -40,7 +40,7 @@ export default {
 					<td>{{ song.genre }}</td>
 					<td>{{ song.artist }}</td>
 					<td>{{ song.album }}</td>
-					<td class="text-end">{{ Math.floor(song.duration / 60) }}:{{ String(Math.floor(song.duration % 60)).padStart(2,0) }}</td>
+					<td class="text-end">{{ song.duration }}</td>
 				</tr>
 			</tbody>
 		</table>
