@@ -17,6 +17,7 @@ export default {
 	},
 	data(){
 		return {
+			originalPageTitle: '',
 			song: null,
 			url: null,
 			isPlaying: false,
@@ -30,8 +31,11 @@ export default {
 	methods: {
 		async play(songIdToPlay,play=true){
 			this.song = this.playQueue.find(song => song.id === songIdToPlay) || null;
-			if(!this.song)
+			if(!this.song){
+				document.title = this.originalPageTitle;
 				return;
+			}
+			document.title = `${this.song.title} - ${this.song.artist} [${this.originalPageTitle}]`;
 			if(!play)
 				return;
 			await this.$nextTick();
@@ -135,6 +139,9 @@ export default {
 				this.$refs.songDuration.textContent = `${String(Math.floor(this.$refs.audio.duration / 60)).padStart(2,0)}:${String(Math.floor(this.$refs.audio.duration % 60)).padStart(2,0)}`;
 			}
 		},30);
+	},
+	created(){
+		this.originalPageTitle = document.title;
 	},
 	template: /* html */`
 		<div class="w-100 d-flex flex-column player z-3">
