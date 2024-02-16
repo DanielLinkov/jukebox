@@ -9,6 +9,12 @@ a:hover{
 	user-select: none;
 	cursor: default;
 }
+.song-row .title > span{
+	cursor:pointer;
+}
+.song-row .title > span:hover{
+	text-decoration: underline;
+}
 .song-row.playing .title{
 	position: relative;
 }
@@ -24,15 +30,15 @@ a:hover{
 	background-size: 16px 16px;
 	position:absolute;
 }
-.player .controls{
+#player .controls{
 	width: 400px;
 	max-width: 100%;
 }
-.player .controls .progress{
+#player .controls .progress{
 	cursor: pointer;
 	height:8px;
 }
-.player .controls .progress .progress-bar{
+#player .controls .progress .progress-bar{
 	transition: width 0.03s ease;
 }
 
@@ -41,4 +47,20 @@ a:hover{
 .genre-list{
 	max-height: 50vh;
 	overflow-y: auto;
+}
+
+#queue-overlay{
+	position: fixed;
+	background-color: var(--bs-body-bg);
+	height: 100vh;
+	width:100%;
+	left:0;
+	top:100%;
+	transition: top 0.3s ease;
+}
+#queue-overlay.visible{
+	top:0;
+}
+#queue .song-row:hover{
+	--bs-table-bg: var(--bs-primary);
 }

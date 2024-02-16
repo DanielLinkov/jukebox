@@ -3,6 +3,7 @@ import Genres from './components/list-genres.js';
 import Artists from './components/list-artists.js';
 import Albums from './components/list-albums.js';
 import Player from './components/player.js';
+import Queue from './components/queue.js';
 
 const app = Vue.createApp({
 	provide(){
@@ -100,6 +101,12 @@ const app = Vue.createApp({
 		},
 		onPlaying(songId){
 			this.currentSong = this.allSongs.find(song => song.id === songId);
+		},
+		playSong(songId){
+			this.$refs.player.play(songId);
+		},
+		toggleQueue(){
+			this.$refs.queue_overlay.classList.toggle('visible');
 		}
 	},
 	created(){
@@ -149,13 +156,23 @@ const app = Vue.createApp({
 				</div>
 			</div>
 		</div>
-		<div class="position-fixed bottom-0 w-100 border-top border-2 border-primary bg-secondary p-2">
+		<div class="position-fixed bottom-0 w-100 border-top border-2 border-primary bg-secondary p-2 z-3">
 			<jb-player
 				ref="player"
 				@playing="onPlaying"
 				@select-artist="selectArtist"
 				@select-album="onSelectAlbum"
+				@toggle-queue="toggleQueue"
 			></jb-player>
+		</div>
+		<div id="queue-overlay" class="z-2" ref="queue_overlay">
+			<jb-queue
+				ref="queue"
+				:playQueue="playQueue"
+				:currentSong="currentSong"
+				@toggle-queue="toggleQueue"
+				@play-song="playSong"
+			></jb-queue>
 		</div>
 	`
 });
@@ -165,4 +182,5 @@ app.component('jb-list-genres', Genres);
 app.component('jb-list-artists', Artists);
 app.component('jb-list-album', Albums);
 app.component('jb-player', Player);
+app.component('jb-queue', Queue);
 app.mount('#app');

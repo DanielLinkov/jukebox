@@ -1,7 +1,7 @@
 
 export default {
 	inject: ['playQueue'],
-	emit: ['playing','pause','previous','next','shuffle','repeat','select-artist','select-album','toggle-queue'],
+	emit: ['playing','pause','previous','next','select-artist','select-album','toggle-queue'],
 	watch: {
 		song(newVal,oldVal){
 			if(newVal){
@@ -26,7 +26,15 @@ export default {
 		}
 	},
 	computed : {
-		songDuration(){
+		repeatTitle(){
+			switch(this.repeatMode){
+				case 'all':
+					return 'Repeat all';
+				case 'one':
+					return 'Repeat one';
+				default:
+					return 'No repeat';
+			}
 		}
 	},
 	methods: {
@@ -91,7 +99,6 @@ export default {
 			this.playNext();
 		},
 		onShuffle() {
-			this.$emit('shuffle');
 		},
 		onRepeat() {
 			switch(this.repeatMode){
@@ -163,7 +170,7 @@ export default {
 		this.originalPageTitle = document.title;
 	},
 	template: /* html */`
-		<div class="w-100 d-flex flex-column player z-3">
+		<div id="player" class="w-100 d-flex flex-column">
 			<div class="song-info text-white position-absolute start-0 ps-2">
 				<div title="Song title" class="fw-bold">[{{ song?.track }}] {{ song ? song.title : 'No song selected' }}</div>
 				<div>
@@ -174,17 +181,17 @@ export default {
 					<span title="Year">{{ song?.year || '—' }}</span>
 				</div>
 			</div>
-			<div class="controls d-flex flex-column justify-content-center mx-auto position-relative">
+			<div class="controls d-flex flex-column justify-content-center mx-auto px-2 position-relative bg-secondary">
 				<div class="position-absolute end-0 top-0 ps-2"><button class="btn btn-secondary" title="Play queue" @click="$emit('toggle-queue')"><i class="bi bi-music-note-list"></i></button></div>
 				<div class="btn-group mx-auto">
 					<button class="btn btn-secondary" title="Shuffle" @click="onShuffle"><i class="bi bi-shuffle"></i></button>
 					<button class="btn btn-secondary" title="Previous" @click="onPrevious"><i class="bi bi-skip-backward-fill"></i></button>
 					<button class="btn btn-secondary" title="Play/Pause" @click="onPlayPause"><i class="bi" :class="[ isPlaying ? 'bi-pause-fill' : 'bi-play-fill' ]"></i></button>
 					<button class="btn btn-secondary" title="Next" @click="onNext"><i class="bi bi-skip-forward-fill"></i></button>
-					<button class="btn btn-secondary" title="Repeat" @click="onRepeat">
-						<i v-if="!repeatMode" class="bi bi-repeat opacity-50" title="No repeat"></i>
-						<i v-if="repeatMode=='all'" class="bi bi-repeat" title="Repeat all"></i>
-						<i v-if="repeatMode=='one'" class="bi bi-repeat-1" title="Repeat one"></i>
+					<button class="btn btn-secondary" @click="onRepeat" :title="repeatTitle">
+						<i v-if="!repeatMode" class="bi bi-repeat opacity-50"></i>
+						<i v-if="repeatMode=='all'" class="bi bi-repeat"></i>
+						<i v-if="repeatMode=='one'" class="bi bi-repeat-1"></i>
 					</button>
 				</div>
 				<div class="d-flex gap-2 justify-content-center align-items-center">
