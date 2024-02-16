@@ -21,6 +21,7 @@ export default {
 			song: null,
 			url: null,
 			isPlaying: false,
+			repeatMode: null,
 			isMute: false
 		}
 	},
@@ -93,7 +94,16 @@ export default {
 			this.$emit('shuffle');
 		},
 		onRepeat() {
-			this.$emit('repeat');
+			switch(this.repeatMode){
+				case 'all':
+					this.repeatMode = 'one';
+					break;
+				case 'one':
+					this.repeatMode = null;
+					break;
+				default:
+					this.repeatMode = 'all';
+			}
 		},
 		onProgressClicked(event){
 			const rect = event.target.closest('.progress').getBoundingClientRect();
@@ -129,6 +139,15 @@ export default {
 		this.$refs.audio.addEventListener('ended', () => {
 			this.$emit('ended');
 			if(this.isPlaying){
+				if(this.repeatMode === 'one'){
+					this.$refs.audio.currentTime = 0;
+					this.$refs.audio.play();
+					return;
+				}
+				if(this.repeatMode === 'all' && this.playQueue.findIndex(song => song.id === this.song.id) === this.playQueue.length - 1){
+					this.play(this.playQueue[0].id);
+					return;
+				}
 				this.playNext();		
 			}
 		});
@@ -156,20 +175,24 @@ export default {
 				</div>
 			</div>
 			<div class="controls d-flex flex-column justify-content-center mx-auto position-relative">
-				<div class="position-absolute start-100 top-0 ps-2"><button class="btn btn-secondary" title="Play queue" @click="$emit('toggle-queue')"><i class="bi bi-music-note-list"></i></button></div>
+				<div class="position-absolute end-0 top-0 ps-2"><button class="btn btn-secondary" title="Play queue" @click="$emit('toggle-queue')"><i class="bi bi-music-note-list"></i></button></div>
 				<div class="btn-group mx-auto">
 					<button class="btn btn-secondary" title="Shuffle" @click="onShuffle"><i class="bi bi-shuffle"></i></button>
 					<button class="btn btn-secondary" title="Previous" @click="onPrevious"><i class="bi bi-skip-backward-fill"></i></button>
 					<button class="btn btn-secondary" title="Play/Pause" @click="onPlayPause"><i class="bi" :class="[ isPlaying ? 'bi-pause-fill' : 'bi-play-fill' ]"></i></button>
 					<button class="btn btn-secondary" title="Next" @click="onNext"><i class="bi bi-skip-forward-fill"></i></button>
-					<button class="btn btn-secondary opacity-50" title="Repeat" @click="onRepeat"><i class="bi bi-repeat"></i></button>
+					<button class="btn btn-secondary" title="Repeat" @click="onRepeat">
+						<i v-if="!repeatMode" class="bi bi-repeat opacity-50" title="No repeat"></i>
+						<i v-if="repeatMode=='all'" class="bi bi-repeat" title="Repeat all"></i>
+						<i v-if="repeatMode=='one'" class="bi bi-repeat-1" title="Repeat one"></i>
+					</button>
 				</div>
 				<div class="d-flex gap-2 justify-content-center align-items-center">
-					<div ref="songProgressTime" class="text-white text-start d-inline-block" style="width:4.2rem;">&mdash;</div>
+					<small ref="songProgressTime" class="text-white text-start d-inline-block" style="width:4.2rem;">&mdash;</small>
 					<div class="progress flex-grow-0" style="width:30rem" @click="onProgressClicked">
 						<div class="progress-bar" ref="playbackProgress"></div>
 					</div>
-					<div ref="songDuration" class="text-white text-end d-inline-block" style="width:4.2rem;">&mdash;</div>
+					<small ref="songDuration" class="text-white text-end d-inline-block" style="width:4.2rem;">&mdash;</small>
 				</div>
 			</div>
 			<div class="volume pt-2 position-absolute end-0 pe-2">

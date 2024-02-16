@@ -126,6 +126,7 @@ const app = Vue.createApp({
 						:artists="artists"
 						:songsInGenre="songsInGenre"
 						@selected="selectArtist"
+						@set-queue="setPlayQueue"
 					></jb-list-artists>
 				</div>
 				<div class="col-md-4">
