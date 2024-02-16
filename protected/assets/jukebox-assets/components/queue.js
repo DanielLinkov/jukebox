@@ -15,7 +15,7 @@ export default{
 	template: /* html */`
 		<div id="queue" class="vh-100 overflow-y-auto pb-5">
 			<button class="btn btn-primary position-absolute top-0 end-0 z-1" @click="$emit('toggle-queue')"><i class="bi bi-x-lg"></i></button>
-			<h3 class="text-center position-sticky top-0 bg-body">Playing Queue</h3>
+			<h3 class="text-center position-sticky top-0 bg-body">Playing Queue ({{ playQueue.length }})</h3>
 			<div class="table-responsive">
 				<table class="table">
 					<thead>

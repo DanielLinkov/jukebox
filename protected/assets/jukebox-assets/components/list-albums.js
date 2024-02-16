@@ -16,7 +16,11 @@ export default{
 	methods: {
 		onSetQueueToAlbum(album){
 			const songsInAlbum = album !== null ? this.songsInArtist.filter(song => song.album === album) : this.songsInArtist;
-			songsInAlbum.sort((a,b) => a.track - b.track);
+			songsInAlbum.sort((a,b) => {
+				if(a.album != b.album)
+					return a.album.localeCompare(b.album);
+				return a.track - b.track
+			});
 			if(songsInAlbum.length > 0)
 				this.$emit('set-queue',songsInAlbum,songsInAlbum[0].id);
 		}

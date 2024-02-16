@@ -54,6 +54,7 @@ const app = Vue.createApp({
 			}
 		},
 		async selectArtist(artist) {
+			this.$refs.queue_overlay.classList.remove('visible');
 			this.activeArtist = artist;	//Set active genre
 			this.activeAlbum = '';	//Reset active album
 			await this.$nextTick();
@@ -63,6 +64,7 @@ const app = Vue.createApp({
 			this.activeAlbum = album;	//Set active album
 		},
 		onSelectAlbum(album){
+			this.$refs.queue_overlay.classList.remove('visible');
 			this.activeGenre = '';
 			const artist = this.allSongs.find(song => song.album === album)?.artist || '';
 			this.activeArtist = this.allSongs.filter(song => song.artist === artist && song.album === album).length == this.allSongs.filter(song => song.album === album).length ? artist : '';
