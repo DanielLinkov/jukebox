@@ -1,7 +1,7 @@
 
 export default {
 	inject: ['playQueue'],
-	emit: ['playing','pause','previous','next','shuffle','repeat','select-artist','select-album'],
+	emit: ['playing','pause','previous','next','shuffle','repeat','select-artist','select-album','toggle-queue'],
 	watch: {
 		song(newVal,oldVal){
 			if(newVal){
@@ -148,7 +148,8 @@ export default {
 					<span title="Year">{{ song?.year || '—' }}</span>
 				</div>
 			</div>
-			<div class="controls d-flex flex-column justify-content-center mx-auto">
+			<div class="controls d-flex flex-column justify-content-center mx-auto position-relative">
+				<div class="position-absolute start-100 top-0 ps-2"><button class="btn btn-secondary" title="Play queue" @click="$emit('toggle-queue')"><i class="bi bi-music-note-list"></i></button></div>
 				<div class="btn-group mx-auto">
 					<button class="btn btn-secondary" title="Shuffle" @click="onShuffle"><i class="bi bi-shuffle"></i></button>
 					<button class="btn btn-secondary" title="Previous" @click="onPrevious"><i class="bi bi-skip-backward-fill"></i></button>
