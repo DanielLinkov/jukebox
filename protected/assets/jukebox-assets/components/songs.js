@@ -5,6 +5,7 @@ export default {
 	data(){
 		return {
 			selectedId: null,
+			touchClicked: false,
 			songsSorted: []
 		}
 	},
@@ -28,6 +29,7 @@ export default {
 		}
 	},
 	template: /* html */`
+		<div class="table-responsive">
 		<table class="table table-striped table-hover">
 			<thead>
 				<tr>
@@ -45,19 +47,22 @@ export default {
 					:key="song.id"
 					@click="selectedId = song.id"
 					@dblclick="setQueueToSongs"
-					@touchstart="setQueueToSongs"
+					@touchstart="touchClick = true"
+					@touchmove="touchClick = false"
+					@touchend="touchClick && setQueueToSongs($event)"
 					class="song-row"
 					:class="[ selectedId == song.id ? 'table-primary' : '',currentSong?.id == song.id ? 'playing' : '' ]"
 					:data-id="song.id"
 				>
 					<td>{{ song.track }}</td>
-					<td class="title">{{ song.title }}</td>
-					<td>{{ song.genre }}</td>
-					<td>{{ song.artist }}</td>
-					<td>{{ song.album }}</td>
+					<td class="title text-nowrap">{{ song.title }}</td>
+					<td class="text-nowrap">{{ song.genre }}</td>
+					<td class="text-nowrap">{{ song.artist }}</td>
+					<td class="text-nowrap">{{ song.album }}</td>
 					<td class="text-end">{{ song.duration }}</td>
 				</tr>
 			</tbody>
 		</table>
+		</div>
 	`
 }

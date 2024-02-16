@@ -26,8 +26,9 @@ export default{
 	template: /* html */`
 		<div>
 			<h5>Album</h5>
-			<div class="list-group">
+			<div class="list-group album-list">
 				<a
+					v-if="albums.length > 1"
 					class="list-group-item list-group-item-action fw-bold"
 					:class="[ !activeAlbum ? 'active' : '' ]"
 					href="#"

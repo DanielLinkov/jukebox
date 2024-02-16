@@ -18,8 +18,11 @@ export default{
 	template: /* html */`
 		<div>
 			<h5>Genre</h5>
-			<div class="list-group">
-				<a class="list-group-item list-group-item-action fw-bold" :class="[ !activeGenre ? 'active' : '' ]" href="#" @click.prevent="$emit('selected','')">
+			<div class="list-group genre-list">
+				<a
+					v-if="genres.length > 1"
+					class="list-group-item list-group-item-action fw-bold" :class="[ !activeGenre ? 'active' : '' ]" href="#" @click.prevent="$emit('selected','')"
+				>
 					All {{ genres.length }} genres ({{ allSongs.length }})
 				</a>
 				<a v-for="genre in list" :key="genre" class="list-group-item list-group-item-action" :class="[ genre == activeGenre ? 'active' : '' ]" href="#" @click.prevent="$emit('selected',genre)">

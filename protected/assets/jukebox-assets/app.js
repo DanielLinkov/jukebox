@@ -43,21 +43,23 @@ const app = Vue.createApp({
 		}
 	},
 	methods: {
-		onGenreSelected(genre) {
+		async selectGenre(genre) {
 			this.activeGenre = genre;	//Set active genre
-			this.activeArtist = '';	//Reset active artist
+			await this.$nextTick();
+			if(this.artists.length == 1){
+				this.selectArtist(this.artists[0]);
+			}else{
+				this.selectArtist('');
+			}
 		},
-		onArtistSelected(artist) {
+		async selectArtist(artist) {
 			this.activeArtist = artist;	//Set active genre
 			this.activeAlbum = '';	//Reset active album
+			await this.$nextTick();
+			this.activeAlbum = this.albums.length == 1 ? this.albums[0] : '';
 		},
 		onAlbumSelected(album) {
 			this.activeAlbum = album;	//Set active album
-		},
-		onSelectArtist(artist){
-			this.activeGenre = '';
-			this.activeArtist = artist;
-			this.activeAlbum = '';
 		},
 		onSelectAlbum(album){
 			this.activeGenre = '';
@@ -115,7 +117,7 @@ const app = Vue.createApp({
 						:activeGenre="activeGenre"
 						:genres="genres"
 						:allSongs="allSongs"
-						@selected="onGenreSelected"
+						@selected="selectGenre"
 					></jb-list-genres>
 				</div>
 				<div class="col-md-4">
@@ -123,7 +125,7 @@ const app = Vue.createApp({
 						:activeArtist="activeArtist"
 						:artists="artists"
 						:songsInGenre="songsInGenre"
-						@selected="onArtistSelected"
+						@selected="selectArtist"
 					></jb-list-artists>
 				</div>
 				<div class="col-md-4">
@@ -150,7 +152,7 @@ const app = Vue.createApp({
 			<jb-player
 				ref="player"
 				@playing="onPlaying"
-				@select-artist="onSelectArtist"
+				@select-artist="selectArtist"
 				@select-album="onSelectAlbum"
 			></jb-player>
 		</div>

@@ -35,3 +35,10 @@ a:hover{
 .player .controls .progress .progress-bar{
 	transition: width 0.03s ease;
 }
+
+.album-list,
+.artist-list,
+.genre-list{
+	max-height: 50vh;
+	overflow-y: auto;
+}
